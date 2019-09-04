@@ -32,7 +32,6 @@ if (width < 1000) {
     starsCount = 600;
 }
 
-// let Z = 0.105;
 let Z = 0.1;
 let WarpZ = 12;
 let alpha = 0.25;
@@ -51,10 +50,10 @@ function getRandomInt(min, max) {
 let speed = 0;
 
 window.addEventListener('keypress', warp);
-window.addEventListener('touchstart', warp);
-window.addEventListener('touchend', warp);
+canvas.addEventListener('touchstart', warp);
+canvas.addEventListener('touchend', warp);
 window.addEventListener('resize', resize);
-content.addEventListener('animationend', function (e) {
+canvas.addEventListener('animationend', function (e) {
     if (e.animationName === 'scale') {
         content.classList.remove('animscale');
         content.classList.add('hidden');
@@ -71,7 +70,6 @@ function warp(e) {
         console.log('KeyW' + WarpDrive);
         if (WarpDrive === false && speed === 0) {
             WarpDrive = true;
-            //content.classList.add('animscale');
             console.log('Warp Drive On!');
             let speedup = setInterval(function () {
                 speed += 1;
@@ -89,9 +87,6 @@ function warp(e) {
         console.log('KeyS' + WarpDrive);
         if (WarpDrive === true && speed === 10) {
             WarpDrive = false;
-            //content.style.opacity = 0;
-            //content.classList.add('animscale2');
-            //  content.classList.remove('hidden');
             console.log('Warp Drive Off!');
             let speeddown = setInterval(function () {
                 speed -= 1;
@@ -142,64 +137,106 @@ function StarCreate() {
             star.y = (Math.random() * height - (height * 0.5)) * WarpZ;
             star.z = WarpZ;
             star.c = 'rgba(' + 140 +  ',' + getRandomInt(220, 255)+ ',' + 255 + ', 1)';
-            star.w =  getRandomInt(1, 5);
-            star.px = 0;//getRandomInt(0, width);
-            star.py = 0;//getRandomInt(0, height);
+            star.px = 0;
+            star.py = 0;
             stars.push(star);
-            //console.log(stars);
 
+        }
+    }
+}
+
+function drawStars() {
+    for (let i=0; i < stars.length; i++) {
+        let star = stars[i];
+
+        let color = 'rgba(' + (Math.random() * 255) +  ',' + 255 + ',' + 255 + ',' + 1 +')';
+        if (star.px !== 0) {
+            let xx = star.x / star.z;
+            let xy = star.y / star.z;
+            ctx.strokeStyle = star.c;
+            ctx.lineWidth = getRandomInt(1, 5);
+            ctx.beginPath();
+            ctx.moveTo(star.px + cx, star.py + cy);
+            ctx.lineTo(xx + cx, xy + cy);
+            ctx.stroke();
+        }
+    }
+}
+
+function drawBackground() {
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = "rgba(0, 0, 0, 1)";
+    ctx.fillRect(0, 0, width, height);
+}
+
+function timer() {
+    ctx.font = "48px serif";
+    ctx.fillStyle = 'white';
+    ctx.fillText(cycle, 50, 50);
+
+    cycle = (cycle >= 60) ? 1 : ++cycle;
+}
+
+function drawHUD() {
+    // ctx.globalAlpha = 1;
+    // ctx.beginPath();
+    // ctx.lineWidth = 10;
+    // ctx.strokeStyle = '#05e6ff';
+    // ctx.arc(300, 300, 200, 0, 2 * Math.PI);
+    // ctx.stroke();
+
+    drawSpeed();
+}
+let step = 10;
+function drawSpeed() {
+    let speedometerWidth = (width / 3 < 300) ? 300 : width / 3;
+    let speedometerHeight = height / 20;
+    let startWidth = center.x - (speedometerWidth / 2);
+    let startHeight = height - (speedometerHeight + 50);
+    let stepHeight = speedometerHeight - 10;
+    let stepMargin = (speedometerWidth - 5) / step;
+    let stepWidth = ((speedometerWidth - 5) / step) - 5;
+    ctx.globalAlpha = 1;
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = '#05e6ff';
+    ctx.rect(startWidth, startHeight, speedometerWidth, speedometerHeight);
+    ctx.stroke();
+
+
+    ctx.globalAlpha = 0.25;
+    ctx.beginPath();
+    ctx.fillStyle = '#05e6ff';
+    ctx.rect(startWidth + 5, startHeight + 5, stepWidth, stepHeight);
+    ctx.fill();
+    if (speed !== 0) {
+        let stepC = step / 10 * speed;
+        for (let i = 1; i < stepC; i++) {
+            ctx.beginPath();
+            ctx.fillStyle = '#05e6ff';
+            ctx.rect(startWidth + (stepMargin * i) + 5, startHeight + 5, stepWidth, stepHeight);
+            ctx.fill();
         }
     }
 }
 
 function render() {
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = "rgba(0, 0, 0, 1)";
-    ctx.fillRect(0, 0, width, height);
 
+    drawBackground();
     StarCreate();
     starMove();
+    drawStars();
+    drawHUD();
 
-    for (let i=0; i < stars.length; i++) {
-        let star = stars[i];
-
-        let color = 'rgba(' + (Math.random() * 255) +  ',' + 255 + ',' + 255 + ',' + star.o +')';
-        //console.log(color);
-        //ctx.globalAlpha = 0.25;
-        //ctx.globalAlpha = alpha;
-        if (star.px !== 0) {
-            let xx = star.x / star.z;
-            let xy = star.y / star.z;
-            //ctx.strokeStyle = '#8eaaff';
-            ctx.strokeStyle = star.c;
-            ctx.lineWidth = getRandomInt(1, 5);
-            //ctx.lineWidth = star.w;
-            ctx.beginPath();
-            ctx.moveTo(xx + cx, xy + cy);
-            ctx.lineTo(star.px + cx, star.py + cy);
-            ctx.stroke();
-        }
-    }
-
-    // ctx.globalAlpha = 1;
-    // ctx.fillStyle = "rgba(0, 0, 0, 0.3)";
-    // ctx.beginPath();
-    // ctx.arc(center.x, center.y, 30, 0, Math.PI*2);
-    // ctx.fill();
-    // ctx.closePath();
-
-    //ctx.font = "48px serif";
-    //ctx.fillText("Cycle: " + cycle, 10, 50);
-
-
-
-    cycle += 0.01;
+    timer();
     requestAnimationFrame(render);
 }
+
+let input = document.getElementById('speed');
+input.addEventListener('input', function (e) {
+    step = e.target.value;
+});
 
 render();
 
 
-
-
-console.log(stars);

@@ -99,7 +99,7 @@ gulp.task('buildJs', function () {
         .pipe(babel({
             presets: ['env']
         }))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(gulp.dest(destpath.local + 'js'))
         .pipe(gulp.dest(destpath.web + 'js'));
 });
