@@ -97,7 +97,8 @@ gulp.task('buildJs', function () {
     return gulp.src(jspath)
         .pipe(concat('main.min.js'))
         .pipe(babel({
-            presets: ['env']
+            presets: ['env'],
+            plugins: ['@babel/polyfill'],
         }))
         //.pipe(uglify())
         .pipe(gulp.dest(destpath.local + 'js'))

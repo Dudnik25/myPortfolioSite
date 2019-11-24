@@ -13,14 +13,40 @@
 <body>
     <div class="wrapper">
         <section>
-            <canvas id="canvasB" style="background-color: black"></canvas>
+            <canvas id="canvasB" class="background">
+                <div class="background"></div>
+            </canvas>
         </section>
-        <div class="content">
-            <h1>Андрей&nbsp;Дудник Веб&#8209;разработчик</h1>
-            <p>В разработке!</p>
-            <p>Варп&#8209;двигатель: W&nbsp;S<br>TOUCH</p>
-        </div>
-        <input id="speed" type="number" value="10">
+        <section id="menu" class="internalLinks hidden">
+            <div class="content">
+                <!--<h1>Андрей&nbsp;Дудник Веб&#8209;разработчик</h1>-->
+                <!--<p>В разработке!</p>-->
+                <!--<p>Варп&#8209;двигатель: W&nbsp;S<br>TOUCH</p>-->
+
+                <ul>
+                    <li><a href="#menu">Главная</a></li>
+                    <li><a href="#portfolio">Портфолио</a></li>
+                    <li><a href="#menu">О себе</a></li>
+                    <li><a href="#menu">О себе</a></li>
+                    <li><a href="#menu">О себе</a></li>
+                    <li><a href="#menu">О себе</a></li>
+                </ul>
+            </div>
+        </section>
+        <section id="portfolio" class="internalLinks hidden">
+            <div class="content">
+                <ul>
+                    <li><a href="#menu">Проект 1</a></li>
+                    <li><a href="#menu">Проект 2</a></li>
+                    <li><a href="#menu">Проект 3</a></li>
+                    <li><a href="#menu">Проект 4</a></li>
+                    <li><a href="#menu">Проект 5</a></li>
+                    <li><a href="#menu">Проект 6</a></li>
+                </ul>
+            </div>
+        </section>
+        <!--<input id="speed" type="number" value="10">-->
+        <div id="cursor"></div>
     </div>
 
 </body>
